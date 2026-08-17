@@ -14,6 +14,7 @@ import { Route as CopilotRouteImport } from './routes/copilot'
 import { Route as DecisionsRouteImport } from './routes/decisions'
 import { Route as InventoryRouteImport } from './routes/inventory'
 import { Route as InventoryIndexRouteImport } from './routes/inventory.index'
+import { Route as InventorySkuRouteImport } from './routes/inventory.$sku'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -40,18 +41,25 @@ const InventoryIndexRoute = InventoryIndexRouteImport.update({
   path: '/',
   getParentRoute: () => InventoryRoute,
 } as any)
+const InventorySkuRoute = InventorySkuRouteImport.update({
+  id: '/$sku',
+  path: '/$sku',
+  getParentRoute: () => InventoryRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/copilot': typeof CopilotRoute
   '/decisions': typeof DecisionsRoute
   '/inventory': typeof InventoryRouteWithChildren
+  '/inventory/$sku': typeof InventorySkuRoute
   '/inventory/': typeof InventoryIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/copilot': typeof CopilotRoute
   '/decisions': typeof DecisionsRoute
+  '/inventory/$sku': typeof InventorySkuRoute
   '/inventory': typeof InventoryIndexRoute
 }
 export interface FileRoutesById {
@@ -60,15 +68,28 @@ export interface FileRoutesById {
   '/copilot': typeof CopilotRoute
   '/decisions': typeof DecisionsRoute
   '/inventory': typeof InventoryRouteWithChildren
+  '/inventory/$sku': typeof InventorySkuRoute
   '/inventory/': typeof InventoryIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/copilot' | '/decisions' | '/inventory' | '/inventory/'
+  fullPaths:
+    | '/'
+    | '/copilot'
+    | '/decisions'
+    | '/inventory'
+    | '/inventory/$sku'
+    | '/inventory/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/copilot' | '/decisions' | '/inventory'
+  to: '/' | '/copilot' | '/decisions' | '/inventory/$sku' | '/inventory'
   id:
-    '__root__' | '/' | '/copilot' | '/decisions' | '/inventory' | '/inventory/'
+    | '__root__'
+    | '/'
+    | '/copilot'
+    | '/decisions'
+    | '/inventory'
+    | '/inventory/$sku'
+    | '/inventory/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -115,14 +136,23 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof InventoryIndexRouteImport
       parentRoute: typeof InventoryRoute
     }
+    '/inventory/$sku': {
+      id: '/inventory/$sku'
+      path: '/$sku'
+      fullPath: '/inventory/$sku'
+      preLoaderRoute: typeof InventorySkuRouteImport
+      parentRoute: typeof InventoryRoute
+    }
   }
 }
 
 interface InventoryRouteChildren {
+  InventorySkuRoute: typeof InventorySkuRoute
   InventoryIndexRoute: typeof InventoryIndexRoute
 }
 
 const InventoryRouteChildren: InventoryRouteChildren = {
+  InventorySkuRoute: InventorySkuRoute,
   InventoryIndexRoute: InventoryIndexRoute,
 }
 
