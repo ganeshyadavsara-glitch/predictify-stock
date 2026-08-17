@@ -11,8 +11,10 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CopilotRouteImport } from './routes/copilot'
+import { Route as DeadStockRouteImport } from './routes/dead-stock'
 import { Route as DecisionsRouteImport } from './routes/decisions'
 import { Route as InventoryRouteImport } from './routes/inventory'
+import { Route as ReorderRouteImport } from './routes/reorder'
 import { Route as InventoryIndexRouteImport } from './routes/inventory.index'
 import { Route as InventorySkuRouteImport } from './routes/inventory.$sku'
 
@@ -26,6 +28,11 @@ const CopilotRoute = CopilotRouteImport.update({
   path: '/copilot',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DeadStockRoute = DeadStockRouteImport.update({
+  id: '/dead-stock',
+  path: '/dead-stock',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DecisionsRoute = DecisionsRouteImport.update({
   id: '/decisions',
   path: '/decisions',
@@ -34,6 +41,11 @@ const DecisionsRoute = DecisionsRouteImport.update({
 const InventoryRoute = InventoryRouteImport.update({
   id: '/inventory',
   path: '/inventory',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReorderRoute = ReorderRouteImport.update({
+  id: '/reorder',
+  path: '/reorder',
   getParentRoute: () => rootRouteImport,
 } as any)
 const InventoryIndexRoute = InventoryIndexRouteImport.update({
@@ -50,15 +62,19 @@ const InventorySkuRoute = InventorySkuRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/copilot': typeof CopilotRoute
+  '/dead-stock': typeof DeadStockRoute
   '/decisions': typeof DecisionsRoute
   '/inventory': typeof InventoryRouteWithChildren
+  '/reorder': typeof ReorderRoute
   '/inventory/$sku': typeof InventorySkuRoute
   '/inventory/': typeof InventoryIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/copilot': typeof CopilotRoute
+  '/dead-stock': typeof DeadStockRoute
   '/decisions': typeof DecisionsRoute
+  '/reorder': typeof ReorderRoute
   '/inventory/$sku': typeof InventorySkuRoute
   '/inventory': typeof InventoryIndexRoute
 }
@@ -66,8 +82,10 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/copilot': typeof CopilotRoute
+  '/dead-stock': typeof DeadStockRoute
   '/decisions': typeof DecisionsRoute
   '/inventory': typeof InventoryRouteWithChildren
+  '/reorder': typeof ReorderRoute
   '/inventory/$sku': typeof InventorySkuRoute
   '/inventory/': typeof InventoryIndexRoute
 }
@@ -76,18 +94,29 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/copilot'
+    | '/dead-stock'
     | '/decisions'
     | '/inventory'
+    | '/reorder'
     | '/inventory/$sku'
     | '/inventory/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/copilot' | '/decisions' | '/inventory/$sku' | '/inventory'
+  to:
+    | '/'
+    | '/copilot'
+    | '/dead-stock'
+    | '/decisions'
+    | '/reorder'
+    | '/inventory/$sku'
+    | '/inventory'
   id:
     | '__root__'
     | '/'
     | '/copilot'
+    | '/dead-stock'
     | '/decisions'
     | '/inventory'
+    | '/reorder'
     | '/inventory/$sku'
     | '/inventory/'
   fileRoutesById: FileRoutesById
@@ -95,8 +124,10 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CopilotRoute: typeof CopilotRoute
+  DeadStockRoute: typeof DeadStockRoute
   DecisionsRoute: typeof DecisionsRoute
   InventoryRoute: typeof InventoryRouteWithChildren
+  ReorderRoute: typeof ReorderRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -115,6 +146,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CopilotRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dead-stock': {
+      id: '/dead-stock'
+      path: '/dead-stock'
+      fullPath: '/dead-stock'
+      preLoaderRoute: typeof DeadStockRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/decisions': {
       id: '/decisions'
       path: '/decisions'
@@ -127,6 +165,13 @@ declare module '@tanstack/react-router' {
       path: '/inventory'
       fullPath: '/inventory'
       preLoaderRoute: typeof InventoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reorder': {
+      id: '/reorder'
+      path: '/reorder'
+      fullPath: '/reorder'
+      preLoaderRoute: typeof ReorderRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/inventory/': {
@@ -163,8 +208,10 @@ const InventoryRouteWithChildren = InventoryRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CopilotRoute: CopilotRoute,
+  DeadStockRoute: DeadStockRoute,
   DecisionsRoute: DecisionsRoute,
   InventoryRoute: InventoryRouteWithChildren,
+  ReorderRoute: ReorderRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
