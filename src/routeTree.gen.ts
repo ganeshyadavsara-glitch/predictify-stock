@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as CopilotRouteImport } from './routes/copilot'
 import { Route as DeadStockRouteImport } from './routes/dead-stock'
 import { Route as DecisionsRouteImport } from './routes/decisions'
+import { Route as DemandRouteImport } from './routes/demand'
 import { Route as ExpiryRouteImport } from './routes/expiry'
 import { Route as InventoryRouteImport } from './routes/inventory'
 import { Route as ReorderRouteImport } from './routes/reorder'
@@ -38,6 +39,11 @@ const DeadStockRoute = DeadStockRouteImport.update({
 const DecisionsRoute = DecisionsRouteImport.update({
   id: '/decisions',
   path: '/decisions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DemandRoute = DemandRouteImport.update({
+  id: '/demand',
+  path: '/demand',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ExpiryRoute = ExpiryRouteImport.update({
@@ -76,6 +82,7 @@ export interface FileRoutesByFullPath {
   '/copilot': typeof CopilotRoute
   '/dead-stock': typeof DeadStockRoute
   '/decisions': typeof DecisionsRoute
+  '/demand': typeof DemandRoute
   '/expiry': typeof ExpiryRoute
   '/inventory': typeof InventoryRouteWithChildren
   '/reorder': typeof ReorderRoute
@@ -88,6 +95,7 @@ export interface FileRoutesByTo {
   '/copilot': typeof CopilotRoute
   '/dead-stock': typeof DeadStockRoute
   '/decisions': typeof DecisionsRoute
+  '/demand': typeof DemandRoute
   '/expiry': typeof ExpiryRoute
   '/reorder': typeof ReorderRoute
   '/suppliers': typeof SuppliersRoute
@@ -100,6 +108,7 @@ export interface FileRoutesById {
   '/copilot': typeof CopilotRoute
   '/dead-stock': typeof DeadStockRoute
   '/decisions': typeof DecisionsRoute
+  '/demand': typeof DemandRoute
   '/expiry': typeof ExpiryRoute
   '/inventory': typeof InventoryRouteWithChildren
   '/reorder': typeof ReorderRoute
@@ -114,6 +123,7 @@ export interface FileRouteTypes {
     | '/copilot'
     | '/dead-stock'
     | '/decisions'
+    | '/demand'
     | '/expiry'
     | '/inventory'
     | '/reorder'
@@ -126,6 +136,7 @@ export interface FileRouteTypes {
     | '/copilot'
     | '/dead-stock'
     | '/decisions'
+    | '/demand'
     | '/expiry'
     | '/reorder'
     | '/suppliers'
@@ -137,6 +148,7 @@ export interface FileRouteTypes {
     | '/copilot'
     | '/dead-stock'
     | '/decisions'
+    | '/demand'
     | '/expiry'
     | '/inventory'
     | '/reorder'
@@ -150,6 +162,7 @@ export interface RootRouteChildren {
   CopilotRoute: typeof CopilotRoute
   DeadStockRoute: typeof DeadStockRoute
   DecisionsRoute: typeof DecisionsRoute
+  DemandRoute: typeof DemandRoute
   ExpiryRoute: typeof ExpiryRoute
   InventoryRoute: typeof InventoryRouteWithChildren
   ReorderRoute: typeof ReorderRoute
@@ -184,6 +197,13 @@ declare module '@tanstack/react-router' {
       path: '/decisions'
       fullPath: '/decisions'
       preLoaderRoute: typeof DecisionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/demand': {
+      id: '/demand'
+      path: '/demand'
+      fullPath: '/demand'
+      preLoaderRoute: typeof DemandRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/expiry': {
@@ -250,6 +270,7 @@ const rootRouteChildren: RootRouteChildren = {
   CopilotRoute: CopilotRoute,
   DeadStockRoute: DeadStockRoute,
   DecisionsRoute: DecisionsRoute,
+  DemandRoute: DemandRoute,
   ExpiryRoute: ExpiryRoute,
   InventoryRoute: InventoryRouteWithChildren,
   ReorderRoute: ReorderRoute,
