@@ -17,6 +17,7 @@ import { Route as DemandRouteImport } from './routes/demand'
 import { Route as ExpiryRouteImport } from './routes/expiry'
 import { Route as InventoryRouteImport } from './routes/inventory'
 import { Route as ReorderRouteImport } from './routes/reorder'
+import { Route as SimulatorRouteImport } from './routes/simulator'
 import { Route as SuppliersRouteImport } from './routes/suppliers'
 import { Route as InventoryIndexRouteImport } from './routes/inventory.index'
 import { Route as InventorySkuRouteImport } from './routes/inventory.$sku'
@@ -61,6 +62,11 @@ const ReorderRoute = ReorderRouteImport.update({
   path: '/reorder',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SimulatorRoute = SimulatorRouteImport.update({
+  id: '/simulator',
+  path: '/simulator',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SuppliersRoute = SuppliersRouteImport.update({
   id: '/suppliers',
   path: '/suppliers',
@@ -86,6 +92,7 @@ export interface FileRoutesByFullPath {
   '/expiry': typeof ExpiryRoute
   '/inventory': typeof InventoryRouteWithChildren
   '/reorder': typeof ReorderRoute
+  '/simulator': typeof SimulatorRoute
   '/suppliers': typeof SuppliersRoute
   '/inventory/$sku': typeof InventorySkuRoute
   '/inventory/': typeof InventoryIndexRoute
@@ -98,6 +105,7 @@ export interface FileRoutesByTo {
   '/demand': typeof DemandRoute
   '/expiry': typeof ExpiryRoute
   '/reorder': typeof ReorderRoute
+  '/simulator': typeof SimulatorRoute
   '/suppliers': typeof SuppliersRoute
   '/inventory/$sku': typeof InventorySkuRoute
   '/inventory': typeof InventoryIndexRoute
@@ -112,6 +120,7 @@ export interface FileRoutesById {
   '/expiry': typeof ExpiryRoute
   '/inventory': typeof InventoryRouteWithChildren
   '/reorder': typeof ReorderRoute
+  '/simulator': typeof SimulatorRoute
   '/suppliers': typeof SuppliersRoute
   '/inventory/$sku': typeof InventorySkuRoute
   '/inventory/': typeof InventoryIndexRoute
@@ -127,6 +136,7 @@ export interface FileRouteTypes {
     | '/expiry'
     | '/inventory'
     | '/reorder'
+    | '/simulator'
     | '/suppliers'
     | '/inventory/$sku'
     | '/inventory/'
@@ -139,6 +149,7 @@ export interface FileRouteTypes {
     | '/demand'
     | '/expiry'
     | '/reorder'
+    | '/simulator'
     | '/suppliers'
     | '/inventory/$sku'
     | '/inventory'
@@ -152,6 +163,7 @@ export interface FileRouteTypes {
     | '/expiry'
     | '/inventory'
     | '/reorder'
+    | '/simulator'
     | '/suppliers'
     | '/inventory/$sku'
     | '/inventory/'
@@ -166,6 +178,7 @@ export interface RootRouteChildren {
   ExpiryRoute: typeof ExpiryRoute
   InventoryRoute: typeof InventoryRouteWithChildren
   ReorderRoute: typeof ReorderRoute
+  SimulatorRoute: typeof SimulatorRoute
   SuppliersRoute: typeof SuppliersRoute
 }
 
@@ -227,6 +240,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ReorderRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/simulator': {
+      id: '/simulator'
+      path: '/simulator'
+      fullPath: '/simulator'
+      preLoaderRoute: typeof SimulatorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/suppliers': {
       id: '/suppliers'
       path: '/suppliers'
@@ -274,6 +294,7 @@ const rootRouteChildren: RootRouteChildren = {
   ExpiryRoute: ExpiryRoute,
   InventoryRoute: InventoryRouteWithChildren,
   ReorderRoute: ReorderRoute,
+  SimulatorRoute: SimulatorRoute,
   SuppliersRoute: SuppliersRoute,
 }
 export const routeTree = rootRouteImport
