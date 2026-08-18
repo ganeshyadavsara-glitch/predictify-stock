@@ -19,6 +19,7 @@ import { Route as InventoryRouteImport } from './routes/inventory'
 import { Route as ReorderRouteImport } from './routes/reorder'
 import { Route as SimulatorRouteImport } from './routes/simulator'
 import { Route as SuppliersRouteImport } from './routes/suppliers'
+import { Route as UsersRouteImport } from './routes/users'
 import { Route as InventoryIndexRouteImport } from './routes/inventory.index'
 import { Route as InventorySkuRouteImport } from './routes/inventory.$sku'
 
@@ -72,6 +73,11 @@ const SuppliersRoute = SuppliersRouteImport.update({
   path: '/suppliers',
   getParentRoute: () => rootRouteImport,
 } as any)
+const UsersRoute = UsersRouteImport.update({
+  id: '/users',
+  path: '/users',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const InventoryIndexRoute = InventoryIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -94,6 +100,7 @@ export interface FileRoutesByFullPath {
   '/reorder': typeof ReorderRoute
   '/simulator': typeof SimulatorRoute
   '/suppliers': typeof SuppliersRoute
+  '/users': typeof UsersRoute
   '/inventory/$sku': typeof InventorySkuRoute
   '/inventory/': typeof InventoryIndexRoute
 }
@@ -107,6 +114,7 @@ export interface FileRoutesByTo {
   '/reorder': typeof ReorderRoute
   '/simulator': typeof SimulatorRoute
   '/suppliers': typeof SuppliersRoute
+  '/users': typeof UsersRoute
   '/inventory/$sku': typeof InventorySkuRoute
   '/inventory': typeof InventoryIndexRoute
 }
@@ -122,6 +130,7 @@ export interface FileRoutesById {
   '/reorder': typeof ReorderRoute
   '/simulator': typeof SimulatorRoute
   '/suppliers': typeof SuppliersRoute
+  '/users': typeof UsersRoute
   '/inventory/$sku': typeof InventorySkuRoute
   '/inventory/': typeof InventoryIndexRoute
 }
@@ -138,6 +147,7 @@ export interface FileRouteTypes {
     | '/reorder'
     | '/simulator'
     | '/suppliers'
+    | '/users'
     | '/inventory/$sku'
     | '/inventory/'
   fileRoutesByTo: FileRoutesByTo
@@ -151,6 +161,7 @@ export interface FileRouteTypes {
     | '/reorder'
     | '/simulator'
     | '/suppliers'
+    | '/users'
     | '/inventory/$sku'
     | '/inventory'
   id:
@@ -165,6 +176,7 @@ export interface FileRouteTypes {
     | '/reorder'
     | '/simulator'
     | '/suppliers'
+    | '/users'
     | '/inventory/$sku'
     | '/inventory/'
   fileRoutesById: FileRoutesById
@@ -180,6 +192,7 @@ export interface RootRouteChildren {
   ReorderRoute: typeof ReorderRoute
   SimulatorRoute: typeof SimulatorRoute
   SuppliersRoute: typeof SuppliersRoute
+  UsersRoute: typeof UsersRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -254,6 +267,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SuppliersRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/users': {
+      id: '/users'
+      path: '/users'
+      fullPath: '/users'
+      preLoaderRoute: typeof UsersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/inventory/': {
       id: '/inventory/'
       path: '/'
@@ -296,6 +316,7 @@ const rootRouteChildren: RootRouteChildren = {
   ReorderRoute: ReorderRoute,
   SimulatorRoute: SimulatorRoute,
   SuppliersRoute: SuppliersRoute,
+  UsersRoute: UsersRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

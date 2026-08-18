@@ -11,6 +11,8 @@ import {
   ShoppingCart,
   Sparkles,
   Truck,
+  Users,
+  ShieldAlert,
   Wand2,
   X,
 } from "lucide-react";
@@ -18,27 +20,32 @@ import { useState, type ReactNode } from "react";
 
 import { cn } from "@/lib/utils";
 import { orchestrate } from "@/lib/agents";
+import { useAccess, type Permission } from "@/lib/access";
 
 const NAV = [
-  { to: "/", label: "Executive Dashboard", icon: Gauge, group: "Overview" },
-  { to: "/decisions", label: "AI Decision Center", icon: Sparkles, group: "Overview" },
-  { to: "/copilot", label: "AI Copilot", icon: Brain, group: "Overview" },
-  { to: "/inventory", label: "Inventory Explorer", icon: PackageSearch, group: "Operations" },
-  { to: "/demand", label: "Demand Intelligence", icon: LineChart, group: "Operations" },
-  { to: "/reorder", label: "Smart Reorder", icon: ShoppingCart, group: "Operations" },
-  { to: "/dead-stock", label: "Dead Stock", icon: Recycle, group: "Risk" },
-  { to: "/expiry", label: "Expiry Command", icon: CalendarClock, group: "Risk" },
-  { to: "/suppliers", label: "Supplier Intelligence", icon: Truck, group: "Risk" },
-  { to: "/simulator", label: "What-If Simulator", icon: Wand2, group: "Risk" },
+  { to: "/", label: "Executive Dashboard", icon: Gauge, group: "Overview", permission: "analytics.view" },
+  { to: "/decisions", label: "AI Decision Center", icon: Sparkles, group: "Overview", permission: "ai.view" },
+  { to: "/copilot", label: "AI Copilot", icon: Brain, group: "Overview", permission: "ai.view" },
+  { to: "/inventory", label: "Inventory Explorer", icon: PackageSearch, group: "Operations", permission: "inventory.view" },
+  { to: "/demand", label: "Demand Intelligence", icon: LineChart, group: "Operations", permission: "ai.view" },
+  { to: "/reorder", label: "Smart Reorder", icon: ShoppingCart, group: "Operations", permission: "reorder.manage" },
+  { to: "/dead-stock", label: "Dead Stock", icon: Recycle, group: "Risk", permission: "risk.view" },
+  { to: "/expiry", label: "Expiry Command", icon: CalendarClock, group: "Risk", permission: "risk.view" },
+  { to: "/suppliers", label: "Supplier Intelligence", icon: Truck, group: "Risk", permission: "risk.view" },
+  { to: "/simulator", label: "What-If Simulator", icon: Wand2, group: "Risk", permission: "ai.view" },
+  { to: "/users", label: "User Management", icon: Users, group: "Administration", permission: "users.manage" },
 ] as const;
 
-const GROUPS = ["Overview", "Operations", "Risk"] as const;
+const GROUPS = ["Overview", "Operations", "Risk", "Administration"] as const;
 
-export function Shell({ children }: { children: ReactNode }) {
+export function Shell({ children, require }: { children: ReactNode; require?: Permission }) {
   const [open, setOpen] = useState(false);
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const { findings } = orchestrate();
   const criticalCount = findings.filter((f) => f.priority === "CRITICAL").length;
+  const { users, currentUser, setCurrentUserId, can } = useAccess();
+  const allowed = !require || can(require);
+  const visibleNav = NAV.filter((item) => can(item.permission));
 
   return (
     <div className="aurora min-h-screen bg-background">
@@ -82,7 +89,7 @@ export function Shell({ children }: { children: ReactNode }) {
                     {group}
                   </p>
                   <ul className="space-y-1">
-                    {NAV.filter((n) => n.group === group).map((item) => {
+                    {visibleNav.filter((n) => n.group === group).map((item) => {
                       const active =
                         item.to === "/" ? pathname === "/" : pathname.startsWith(item.to);
                       return (
@@ -154,6 +161,22 @@ export function Shell({ children }: { children: ReactNode }) {
               <span className="text-foreground">predict problems and act on them.</span>
             </p>
             <div className="ml-auto flex items-center gap-2">
+              <label className="flex items-center gap-2 text-[11px] text-muted-foreground">
+                <span className="hidden sm:inline">Signed in as</span>
+                <select
+                  aria-label="Switch user"
+                  value={currentUser.id}
+                  onChange={(e) => setCurrentUserId(e.target.value)}
+                  className="max-w-[150px] rounded-lg border border-border bg-background px-2 py-1.5 text-xs text-foreground outline-none focus:border-primary"
+                >
+                  {users.map((u) => (
+                    <option key={u.id} value={u.id}>
+                      {u.name} · {u.role}
+                      {u.active ? "" : " (inactive)"}
+                    </option>
+                  ))}
+                </select>
+              </label>
               <Link
                 to="/copilot"
                 className="inline-flex items-center gap-2 rounded-lg bg-primary px-3.5 py-2 text-xs font-semibold text-primary-foreground shadow-[var(--shadow-glow)] transition-transform hover:-translate-y-0.5"
@@ -164,7 +187,31 @@ export function Shell({ children }: { children: ReactNode }) {
             </div>
           </header>
 
-          <main className="flex-1 space-y-8 px-4 py-6 md:px-8 md:py-8">{children}</main>
+          <main className="flex-1 space-y-8 px-4 py-6 md:px-8 md:py-8">
+            {allowed ? (
+              children
+            ) : (
+              <div className="panel mx-auto mt-10 max-w-lg p-8 text-center">
+                <span className="mx-auto grid size-11 place-items-center rounded-xl bg-critical/12 text-critical">
+                  <ShieldAlert className="size-5" />
+                </span>
+                <h1 className="mt-4 text-lg font-semibold text-foreground">Access restricted</h1>
+                <p className="mt-2 text-sm text-muted-foreground">
+                  {currentUser.active
+                    ? `The ${currentUser.role} role doesn't have access to this area. Ask an Admin if you need it.`
+                    : `${currentUser.name} is inactive. An Admin must reactivate this account.`}
+                </p>
+                {visibleNav[0] ? (
+                  <Link
+                    to={visibleNav[0].to}
+                    className="mt-5 inline-flex rounded-lg bg-primary px-3.5 py-2 text-xs font-semibold text-primary-foreground"
+                  >
+                    Go to {visibleNav[0].label}
+                  </Link>
+                ) : null}
+              </div>
+            )}
+          </main>
 
           <footer className="border-t border-border/60 px-4 py-5 text-[11px] text-muted-foreground md:px-8">
             StockPilot AI · deterministic inventory intelligence · every number traced to catalogue data
