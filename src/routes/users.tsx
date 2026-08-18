@@ -91,7 +91,7 @@ function UsersPage() {
 
       <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <MetricCard label="Total users" value={`${users.length}`} sub="In this workspace" icon={Users} />
-        <MetricCard label="Active" value={`${activeCount}`} sub="Can sign in and act" icon={UserCheck} tone="success" delay={60} />
+        <MetricCard label="Active" value={`${activeCount}`} sub="Can sign in and act" icon={UserCheck} tone="positive" delay={60} />
         <MetricCard label="Inactive" value={`${users.length - activeCount}`} sub="Access suspended" icon={UserX} tone="warning" delay={120} />
         <MetricCard label="Admins" value={`${adminCount}`} sub="Full platform access" icon={ShieldCheck} delay={180} />
       </section>
