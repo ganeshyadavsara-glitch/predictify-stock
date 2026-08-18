@@ -136,7 +136,7 @@ function ReorderCenter() {
   );
 }
 
-function Cell({ label, value, tone }: { label: string; value: string; tone?: "critical" }) {
+function Cell({ label, value, tone }: { label: string; value: string; tone?: "critical" | undefined }) {
   return (
     <div>
       <dt className="text-[11px] uppercase tracking-[0.12em] text-muted-foreground">{label}</dt>

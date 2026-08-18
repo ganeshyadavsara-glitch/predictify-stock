@@ -106,7 +106,7 @@ function SupplierPage() {
   );
 }
 
-function Row({ label, value, tone }: { label: string; value: string; tone?: "critical" }) {
+function Row({ label, value, tone }: { label: string; value: string; tone?: "critical" | undefined }) {
   return (
     <div className="flex items-baseline justify-between gap-2 border-b border-dashed border-border/60 pb-1.5">
       <dt className="text-muted-foreground">{label}</dt>
