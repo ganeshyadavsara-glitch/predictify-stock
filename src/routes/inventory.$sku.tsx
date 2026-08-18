@@ -220,7 +220,7 @@ function Stat({
   value: string;
   sub: string;
   icon: React.ReactNode;
-  tone?: "critical";
+  tone?: "critical" | undefined;
 }) {
   return (
     <div className="panel animate-rise p-5">
