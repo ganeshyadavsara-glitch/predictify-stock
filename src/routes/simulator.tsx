@@ -61,7 +61,7 @@ function Simulator() {
     }));
 
   return (
-    <Shell>
+    <Shell require="ai.view">
       <PageHeader
         eyebrow="Scenario planning"
         title="What-If Simulator"

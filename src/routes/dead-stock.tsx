@@ -27,7 +27,7 @@ function DeadStockPage() {
   const { items, totalValue, avgDaysWithoutMovement } = o.deadstock;
 
   return (
-    <Shell>
+    <Shell require="risk.view">
       <PageHeader
         eyebrow="Dead Stock Agent"
         title="Dead Stock Intelligence"

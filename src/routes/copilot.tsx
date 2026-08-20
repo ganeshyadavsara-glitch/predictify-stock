@@ -57,7 +57,7 @@ function CopilotPage() {
   }
 
   return (
-    <Shell>
+    <Shell require="ai.view">
       <PageHeader
         eyebrow="Conversational intelligence"
         title="AI Inventory Copilot"

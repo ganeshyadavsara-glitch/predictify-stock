@@ -32,7 +32,7 @@ function ReorderCenter() {
   const urgent = lines.filter((l) => l.urgency === "CRITICAL" || l.urgency === "HIGH");
 
   return (
-    <Shell>
+    <Shell require="reorder.manage">
       <PageHeader
         eyebrow="Smart Reorder Agent"
         title="Smart Reorder Center"

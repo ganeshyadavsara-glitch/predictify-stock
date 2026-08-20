@@ -46,7 +46,7 @@ function DemandPage() {
   }, [product, horizon]);
 
   return (
-    <Shell>
+    <Shell require="ai.view">
       <PageHeader
         eyebrow="Demand Forecast Agent"
         title="Demand Intelligence"

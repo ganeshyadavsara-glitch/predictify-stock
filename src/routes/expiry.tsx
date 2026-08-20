@@ -34,7 +34,7 @@ function ExpiryPage() {
   const { items, totalValueAtRisk, totalUnitsAtRisk } = o.expiry;
 
   return (
-    <Shell>
+    <Shell require="risk.view">
       <PageHeader
         eyebrow="Expiry Risk Agent"
         title="Expiry Command Center"
