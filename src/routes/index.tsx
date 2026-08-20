@@ -47,7 +47,7 @@ function Dashboard() {
   const topActions = o.findings.slice(0, 5);
 
   return (
-    <Shell>
+    <Shell require="analytics.view">
       <PageHeader
         eyebrow="Executive dashboard"
         title="Inventory command overview"

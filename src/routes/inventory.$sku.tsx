@@ -82,7 +82,7 @@ function ProductIntelligence() {
   const covered = product.daysRemaining >= product.leadTimeDays;
 
   return (
-    <Shell>
+    <Shell require="inventory.view">
       <Link to="/inventory" className="inline-flex items-center gap-1.5 text-xs text-muted-foreground transition-colors hover:text-primary">
         <ArrowLeft className="size-3.5" /> Back to Inventory Explorer
       </Link>

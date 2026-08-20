@@ -63,7 +63,7 @@ function InventoryExplorer() {
   }, [products, query, category, status, sort]);
 
   return (
-    <Shell>
+    <Shell require="inventory.view">
       <PageHeader
         eyebrow="Catalogue"
         title="Inventory Explorer"

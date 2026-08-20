@@ -43,7 +43,7 @@ function SupplierPage() {
   const leastReliable = [...SUPPLIERS].sort((a, b) => a.reliability - b.reliability)[0]!;
 
   return (
-    <Shell>
+    <Shell require="risk.view">
       <PageHeader
         eyebrow="Supply chain"
         title="Supplier Intelligence"

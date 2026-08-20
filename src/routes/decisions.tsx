@@ -38,7 +38,7 @@ function DecisionCenter() {
   const valueAtStake = o.findings.reduce((s, f) => s + f.impactValue, 0);
 
   return (
-    <Shell>
+    <Shell require="ai.view">
       <PageHeader
         eyebrow="Orchestrated action plan"
         title="AI Decision Center"
