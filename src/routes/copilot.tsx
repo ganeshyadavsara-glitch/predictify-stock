@@ -9,6 +9,8 @@ import { askCopilot, SUGGESTED_QUESTIONS, type CopilotAnswer } from "@/lib/copil
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/copilot")({
+  validateSearch: (search: Record<string, unknown>): { q?: string } =>
+    typeof search["q"] === "string" ? { q: search["q"] } : {},
   head: () => ({
     meta: [
       { title: "AI Inventory Copilot — StockPilot AI" },
@@ -34,10 +36,12 @@ interface Turn {
 }
 
 function CopilotPage() {
+  const initialQuestion = Route.useSearch().q ?? "";
   const [turns, setTurns] = useState<Turn[]>([]);
   const [input, setInput] = useState("");
   const endRef = useRef<HTMLDivElement>(null);
   const counter = useRef(0);
+  const bootstrapped = useRef(false);
 
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
@@ -55,6 +59,13 @@ function CopilotPage() {
       setTurns((t) => t.map((turn) => (turn.id === id ? { ...turn, answer } : turn)));
     }, 550);
   }
+
+  useEffect(() => {
+    if (bootstrapped.current || !initialQuestion.trim()) return;
+    bootstrapped.current = true;
+    ask(initialQuestion);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialQuestion]);
 
   return (
     <Shell require="ai.view">

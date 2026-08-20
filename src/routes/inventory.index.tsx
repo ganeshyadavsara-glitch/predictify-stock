@@ -8,7 +8,22 @@ import { CATEGORIES } from "@/data/catalog";
 import { formatShortDate, getProducts, inr, round, type Product, type StockStatus } from "@/lib/intelligence";
 import { cn } from "@/lib/utils";
 
+interface InventorySearch {
+  q?: string;
+  category?: string;
+  status?: string;
+  sort?: SortKey;
+}
+
 export const Route = createFileRoute("/inventory/")({
+  validateSearch: (search: Record<string, unknown>): InventorySearch => {
+    const out: InventorySearch = {};
+    if (typeof search["q"] === "string") out.q = search["q"];
+    if (typeof search["category"] === "string") out.category = search["category"];
+    if (typeof search["status"] === "string") out.status = search["status"];
+    if (typeof search["sort"] === "string") out.sort = search["sort"] as SortKey;
+    return out;
+  },
   head: () => ({
     meta: [
       { title: "Inventory Explorer — StockPilot AI" },
@@ -37,11 +52,12 @@ const STATUSES: StockStatus[] = [
 type SortKey = "risk" | "daysRemaining" | "value" | "name" | "velocity";
 
 function InventoryExplorer() {
+  const search = Route.useSearch();
   const products = useMemo(() => getProducts(), []);
-  const [query, setQuery] = useState("");
-  const [category, setCategory] = useState<string>("All");
-  const [status, setStatus] = useState<string>("All");
-  const [sort, setSort] = useState<SortKey>("risk");
+  const [query, setQuery] = useState(search.q ?? "");
+  const [category, setCategory] = useState<string>(search.category ?? "All");
+  const [status, setStatus] = useState<string>(search.status ?? "All");
+  const [sort, setSort] = useState<SortKey>(search.sort ?? "risk");
 
   const rows = useMemo(() => {
     const q = query.trim().toLowerCase();
