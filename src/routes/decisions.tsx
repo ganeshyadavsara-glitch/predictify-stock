@@ -9,9 +9,10 @@ import { inr } from "@/lib/intelligence";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/decisions")({
-  validateSearch: (search: Record<string, unknown>) => ({
-    priority: typeof search.priority === "string" ? search.priority : "ALL",
-  }),
+  validateSearch: (search: Record<string, unknown>): { priority?: Priority | "ALL" } =>
+    typeof search["priority"] === "string"
+      ? { priority: search["priority"] as Priority | "ALL" }
+      : {},
   head: () => ({
     meta: [
       { title: "AI Decision Center — StockPilot AI" },
@@ -35,7 +36,7 @@ const FILTERS: (Priority | "ALL")[] = ["ALL", "CRITICAL", "HIGH", "MEDIUM", "LOW
 function DecisionCenter() {
   const search = Route.useSearch();
   const o = useMemo(() => orchestrate(), []);
-  const [filter, setFilter] = useState<Priority | "ALL">(search.priority as Priority | "ALL");
+  const [filter, setFilter] = useState<Priority | "ALL">(search.priority ?? "ALL");
 
   const visible = o.findings.filter((f) => filter === "ALL" || f.priority === filter);
   const critical = o.findings.filter((f) => f.priority === "CRITICAL");

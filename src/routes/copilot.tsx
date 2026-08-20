@@ -9,9 +9,8 @@ import { askCopilot, SUGGESTED_QUESTIONS, type CopilotAnswer } from "@/lib/copil
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/copilot")({
-  validateSearch: (search: Record<string, unknown>) => ({
-    q: typeof search.q === "string" ? search.q : "",
-  }),
+  validateSearch: (search: Record<string, unknown>): { q?: string } =>
+    typeof search["q"] === "string" ? { q: search["q"] } : {},
   head: () => ({
     meta: [
       { title: "AI Inventory Copilot — StockPilot AI" },
@@ -37,7 +36,7 @@ interface Turn {
 }
 
 function CopilotPage() {
-  const { q: initialQuestion } = Route.useSearch();
+  const initialQuestion = Route.useSearch().q ?? "";
   const [turns, setTurns] = useState<Turn[]>([]);
   const [input, setInput] = useState("");
   const endRef = useRef<HTMLDivElement>(null);
