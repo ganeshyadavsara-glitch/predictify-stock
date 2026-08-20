@@ -141,6 +141,9 @@ export function MetricCard({
   icon: Icon,
   tone = "neutral",
   delay = 0,
+  to,
+  search,
+  progress,
 }: {
   label: string;
   value: string;
@@ -148,6 +151,11 @@ export function MetricCard({
   icon: LucideIcon;
   tone?: "neutral" | "critical" | "warning" | "positive" | "accent";
   delay?: number;
+  /** When provided the whole card becomes a link into the matching analysis view. */
+  to?: string;
+  search?: Record<string, string>;
+  /** 0-100 — renders a risk/health bar under the value. */
+  progress?: number;
 }) {
   const toneRing = {
     neutral: "text-muted-foreground bg-muted",
@@ -157,19 +165,61 @@ export function MetricCard({
     accent: "text-accent bg-accent/12",
   }[tone];
 
-  return (
-    <div
-      className="panel animate-rise group relative overflow-hidden p-5 transition-transform duration-300 hover:-translate-y-0.5"
-      style={{ animationDelay: `${delay}ms` }}
-    >
+  const barTone = {
+    neutral: "bg-muted-foreground/50",
+    critical: "bg-critical",
+    warning: "bg-warning",
+    positive: "bg-success",
+    accent: "bg-accent",
+  }[tone];
+
+  const body = (
+    <>
       <div className="flex items-start justify-between gap-3">
         <p className="text-xs font-medium uppercase tracking-[0.14em] text-muted-foreground">{label}</p>
-        <span className={cn("grid size-8 place-items-center rounded-lg", toneRing)}>
+        <span className={cn("grid size-8 place-items-center rounded-lg transition-transform duration-300 group-hover:scale-110", toneRing)}>
           <Icon className="size-4" />
         </span>
       </div>
       <p className="num mt-4 text-2xl font-semibold text-foreground md:text-[1.7rem]">{value}</p>
       {sub ? <p className="mt-1 text-xs text-muted-foreground">{sub}</p> : null}
+      {typeof progress === "number" ? (
+        <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-muted">
+          <div
+            className={cn("h-full rounded-full transition-all duration-1000 ease-out", barTone)}
+            style={{ width: `${Math.max(2, Math.min(100, progress))}%` }}
+          />
+        </div>
+      ) : null}
+      {to ? (
+        <span className="mt-3 inline-flex items-center gap-1 text-[11px] font-medium text-primary opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+          Open analysis <ArrowUpRight className="size-3" />
+        </span>
+      ) : null}
+    </>
+  );
+
+  const className = cn(
+    "panel animate-rise group relative block overflow-hidden p-5 transition-all duration-300",
+    to ? "hover:-translate-y-1 hover:border-primary/40 hover:shadow-[var(--shadow-glow)]" : "hover:-translate-y-0.5",
+  );
+
+  if (to) {
+    return (
+      <Link
+        to={to as never}
+        search={(search ?? {}) as never}
+        className={className}
+        style={{ animationDelay: `${delay}ms` }}
+      >
+        {body}
+      </Link>
+    );
+  }
+
+  return (
+    <div className={className} style={{ animationDelay: `${delay}ms` }}>
+      {body}
     </div>
   );
 }
