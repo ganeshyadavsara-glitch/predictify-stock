@@ -9,6 +9,12 @@ import { formatShortDate, getProducts, inr, round, type Product, type StockStatu
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/inventory/")({
+  validateSearch: (search: Record<string, unknown>) => ({
+    q: typeof search.q === "string" ? search.q : "",
+    category: typeof search.category === "string" ? search.category : "All",
+    status: typeof search.status === "string" ? search.status : "All",
+    sort: typeof search.sort === "string" ? search.sort : "risk",
+  }),
   head: () => ({
     meta: [
       { title: "Inventory Explorer — StockPilot AI" },
@@ -37,11 +43,12 @@ const STATUSES: StockStatus[] = [
 type SortKey = "risk" | "daysRemaining" | "value" | "name" | "velocity";
 
 function InventoryExplorer() {
+  const search = Route.useSearch();
   const products = useMemo(() => getProducts(), []);
-  const [query, setQuery] = useState("");
-  const [category, setCategory] = useState<string>("All");
-  const [status, setStatus] = useState<string>("All");
-  const [sort, setSort] = useState<SortKey>("risk");
+  const [query, setQuery] = useState(search.q);
+  const [category, setCategory] = useState<string>(search.category);
+  const [status, setStatus] = useState<string>(search.status);
+  const [sort, setSort] = useState<SortKey>(search.sort as SortKey);
 
   const rows = useMemo(() => {
     const q = query.trim().toLowerCase();
