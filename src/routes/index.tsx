@@ -12,7 +12,7 @@ import {
   Sparkles,
   Target,
 } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
 import { toast } from "sonner";
 
@@ -52,7 +52,10 @@ function Dashboard() {
   const a = o.analytics;
 
   const [refreshing, setRefreshing] = useState(false);
-  const [syncedAt, setSyncedAt] = useState(() => new Date());
+  const [syncedAt, setSyncedAt] = useState<Date | null>(null);
+  useEffect(() => {
+    setSyncedAt(new Date());
+  }, []);
   const [tab, setTab] = useState<Priority | "ALL">("ALL");
   const [query, setQuery] = useState("");
   const [ask, setAsk] = useState("");
@@ -176,7 +179,7 @@ function Dashboard() {
         </form>
 
         <span className="num text-[11px] text-muted-foreground">
-          Synced {syncedAt.toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" })}
+          Synced {syncedAt ? syncedAt.toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" }) : "—"}
         </span>
       </div>
 
