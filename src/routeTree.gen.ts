@@ -16,6 +16,7 @@ import { Route as DecisionsRouteImport } from './routes/decisions'
 import { Route as DemandRouteImport } from './routes/demand'
 import { Route as ExpiryRouteImport } from './routes/expiry'
 import { Route as InventoryRouteImport } from './routes/inventory'
+import { Route as MapsRouteImport } from './routes/maps'
 import { Route as ReorderRouteImport } from './routes/reorder'
 import { Route as SimulatorRouteImport } from './routes/simulator'
 import { Route as SuppliersRouteImport } from './routes/suppliers'
@@ -58,6 +59,11 @@ const InventoryRoute = InventoryRouteImport.update({
   path: '/inventory',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MapsRoute = MapsRouteImport.update({
+  id: '/maps',
+  path: '/maps',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ReorderRoute = ReorderRouteImport.update({
   id: '/reorder',
   path: '/reorder',
@@ -97,6 +103,7 @@ export interface FileRoutesByFullPath {
   '/demand': typeof DemandRoute
   '/expiry': typeof ExpiryRoute
   '/inventory': typeof InventoryRouteWithChildren
+  '/maps': typeof MapsRoute
   '/reorder': typeof ReorderRoute
   '/simulator': typeof SimulatorRoute
   '/suppliers': typeof SuppliersRoute
@@ -111,6 +118,7 @@ export interface FileRoutesByTo {
   '/decisions': typeof DecisionsRoute
   '/demand': typeof DemandRoute
   '/expiry': typeof ExpiryRoute
+  '/maps': typeof MapsRoute
   '/reorder': typeof ReorderRoute
   '/simulator': typeof SimulatorRoute
   '/suppliers': typeof SuppliersRoute
@@ -127,6 +135,7 @@ export interface FileRoutesById {
   '/demand': typeof DemandRoute
   '/expiry': typeof ExpiryRoute
   '/inventory': typeof InventoryRouteWithChildren
+  '/maps': typeof MapsRoute
   '/reorder': typeof ReorderRoute
   '/simulator': typeof SimulatorRoute
   '/suppliers': typeof SuppliersRoute
@@ -144,6 +153,7 @@ export interface FileRouteTypes {
     | '/demand'
     | '/expiry'
     | '/inventory'
+    | '/maps'
     | '/reorder'
     | '/simulator'
     | '/suppliers'
@@ -158,6 +168,7 @@ export interface FileRouteTypes {
     | '/decisions'
     | '/demand'
     | '/expiry'
+    | '/maps'
     | '/reorder'
     | '/simulator'
     | '/suppliers'
@@ -173,6 +184,7 @@ export interface FileRouteTypes {
     | '/demand'
     | '/expiry'
     | '/inventory'
+    | '/maps'
     | '/reorder'
     | '/simulator'
     | '/suppliers'
@@ -189,6 +201,7 @@ export interface RootRouteChildren {
   DemandRoute: typeof DemandRoute
   ExpiryRoute: typeof ExpiryRoute
   InventoryRoute: typeof InventoryRouteWithChildren
+  MapsRoute: typeof MapsRoute
   ReorderRoute: typeof ReorderRoute
   SimulatorRoute: typeof SimulatorRoute
   SuppliersRoute: typeof SuppliersRoute
@@ -244,6 +257,13 @@ declare module '@tanstack/react-router' {
       path: '/inventory'
       fullPath: '/inventory'
       preLoaderRoute: typeof InventoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/maps': {
+      id: '/maps'
+      path: '/maps'
+      fullPath: '/maps'
+      preLoaderRoute: typeof MapsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/reorder': {
@@ -313,6 +333,7 @@ const rootRouteChildren: RootRouteChildren = {
   DemandRoute: DemandRoute,
   ExpiryRoute: ExpiryRoute,
   InventoryRoute: InventoryRouteWithChildren,
+  MapsRoute: MapsRoute,
   ReorderRoute: ReorderRoute,
   SimulatorRoute: SimulatorRoute,
   SuppliersRoute: SuppliersRoute,
