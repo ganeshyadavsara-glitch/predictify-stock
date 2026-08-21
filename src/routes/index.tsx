@@ -52,7 +52,10 @@ function Dashboard() {
   const a = o.analytics;
 
   const [refreshing, setRefreshing] = useState(false);
-  const [syncedAt, setSyncedAt] = useState(() => new Date());
+  const [syncedAt, setSyncedAt] = useState<Date | null>(null);
+  useEffect(() => {
+    setSyncedAt(new Date());
+  }, []);
   const [tab, setTab] = useState<Priority | "ALL">("ALL");
   const [query, setQuery] = useState("");
   const [ask, setAsk] = useState("");
