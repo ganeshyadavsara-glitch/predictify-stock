@@ -179,7 +179,7 @@ function Dashboard() {
         </form>
 
         <span className="num text-[11px] text-muted-foreground">
-          Synced {syncedAt.toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" })}
+          Synced {syncedAt ? syncedAt.toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" }) : "—"}
         </span>
       </div>
 
